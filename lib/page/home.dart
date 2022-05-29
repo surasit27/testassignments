@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
     month = DateTime.now().month;
     year = DateTime.now().month;
     dayName = getDay(weekDay);
-    Timer.periodic(Duration(seconds: 1), (Timer t) => getDate());
+    Timer.periodic(const Duration(seconds: 1), (Timer t) => getDate());
   }
 
   getDate() {
@@ -47,14 +47,14 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<Null> ReadJsonData() async {
+  Future<void> ReadJsonData() async {
     final response =
         await rooBundle.rootBundle.loadString('assets/example_data.json');
     final List jsonFromData = json.decode(response);
     List<DataModel> result =
         jsonFromData.map((e) => DataModel.fromJson(e)).toList();
     for (var item in result) {
-      print(item.operationTime[0].day);
+     
       setState(() {
         datamodel.add(item);
       });
@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
                 return ListTile(
                   leading: Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 4),
-                    child: Container(
+                    child: SizedBox(
                       width: 80,
                       height: 60,
                       child: Image.network(
@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
                   title: Text(dataModel.name),
                 );
               },
-              noItemsFoundBuilder: (context) => Container(
+              noItemsFoundBuilder: (context) => const SizedBox(
                 height: 80,
                 child: Center(
                   child: Text(
@@ -126,8 +126,8 @@ class _HomeState extends State<Home> {
           ),
           Column(
             children: List.generate(datamodel.length, (index) {
-              if (datamodel.length == 0) {
-                return Center(
+              if (datamodel.isEmpty) {
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else {
@@ -171,7 +171,7 @@ class _HomeState extends State<Home> {
                         height: 150,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                          image: NetworkImage('${dataModel.profileImageUrl}'),
+                          image: NetworkImage(dataModel.profileImageUrl),
                           fit: BoxFit.cover,
                         )),
                       ),
@@ -182,10 +182,10 @@ class _HomeState extends State<Home> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _ratingStas(dataModel.rating),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
                               '${dataModel.rating}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.amber,
                                   fontWeight: FontWeight.w600),
@@ -208,24 +208,24 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${dataModel.name}',
+                          dataModel.name,
                           style: Constant().h2Style(),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.calendar_month_outlined,
                               color: Colors.grey,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8,
                             ),
                             Text(
-                              '$dayName',
-                              style: TextStyle(
+                              dayName,
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,
                                   fontWeight: FontWeight.w500),
@@ -310,8 +310,8 @@ String getDay(int weekDay) {
 
 ////////////////////BuildImage
 Widget _buildImage(String dataImage, int index) => Container(
-      margin: EdgeInsets.symmetric(horizontal: 12),
-      child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      child: SizedBox(
         width: 1000,
         height: 1000,
         child: Image.network(
